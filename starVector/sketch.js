@@ -1,5 +1,5 @@
 const STARSIZE = 10;
-var exploding = false;
+var exploding = 0;
 class Star{
   constructor(x,y){
     this.x = x;
@@ -62,16 +62,18 @@ class shootingStar{
   }
 }
 class explosionParticle{
-  constructor(x,y){
-    this.x = x;
-    this.y = y;
-    this.vector = createVector(random(-4,4), random(-4,4));
+  constructor(originX, originY){
+    this.x = originX;
+    this.y = originY;
+    this.originX = originX;
+    this.originY = originY;
+    this.vector = createVector(random(-10,10), random(-10,10));
     this.opacity = 100;
     this.cycles = 0;
   }
   draw(){
     fill(200, this.opacity);
-    rect(this.x, this.y, 2,2);
+    rect(this.x, this.y, 3,3);
     this.opacity -= random(0,5);
     this.cycles +=1;
   }
@@ -120,17 +122,17 @@ function draw(){
     }
   }
   if(frameCount % 30 === 0){
-    if(shootingStars.length >= 100){
+    if(shootingStars.length >= 25){
       shootingStars.shift();
     }
-    else{
+    else{shootingStars.push(new shootingStar(Math.floor(random(0,width/2)), Math.floor(random(0, height/2))));
     }
-    shootingStars.push(new shootingStar(Math.floor(random(0,width/2)), Math.floor(random(0, height/2))));
-  }
+      
+    }
   for(var i = 0; i < shootingStars.length - 1; i++){
     if(shootingStars[i].x >= mouseX - 10 && shootingStars[i].y >= mouseY - 10 && shootingStars[i].x <= mouseX + 10 && shootingStars[i].y <= mouseY + 10){
       shootingStars.splice(i,1);
-      exploding = true;
+      exploding += 1;
     }
     if(shootingStars[i].x >= width || shootingStars[i].y >= height || shootingStars[i].x <=0 || shootingStars[i].y <=0){
       shootingStars.splice(i,1);
@@ -145,14 +147,14 @@ function draw(){
     shootingStars[i].draw();
     
   }
-  if(exploding == true){
-      particles.push(new explosionParticle(mouseX, mouseY));
+  if(exploding >=1){
+    particles.push(new explosionParticle(mouseX, mouseY));
     for(var i = 0; i < particles.length; i++){
       particles[i].draw();
       particles[i].x += particles[i].vector.x;
       particles[i].y += particles[i].vector.y;
-      if(particles[i].cycles >= 20){
-        exploding = false;
+      if(particles[i].cycles >= 30 * exploding){
+        exploding  = 0;
         particles = [];
         break;
       }
