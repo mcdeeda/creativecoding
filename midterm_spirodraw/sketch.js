@@ -33,82 +33,85 @@ var alpha = 100; // how opaque is the tracing system
 
 var trace = false; // are we tracing?
 
-function preload(){
-  img = loadImage("https://unsplash.it/" + windowWidth + "/" + windowHeight + "/?random");
+function preload() {
+  img = loadImage("http://unsplash.it/" + windowWidth + "/" + windowHeight + "/?random");
 }
-function setup()
-{
-  
+
+function setup() {
+
   createCanvas(windowWidth, windowHeight); // OpenGL mode
   imageHolder = createGraphics(windowWidth, windowHeight);
-  imageHolder.image(img,0,0);
-  rad = height/4; // compute radius for central circle
+  imageHolder.image(img, 0, 0);
+  rad = height / 4; // compute radius for central circle
   background(255); // clear the screen
 
-  for (i = 0; i<sines.length; i++)
-  {
+  for (i = 0; i < sines.length; i++) {
     sines[i] = PI; // start EVERYBODY facing NORTH
   }
 }
 
-function draw()
-{
+function draw() {
   if (!trace) {
     background(255);
     stroke(255, 255); // black pen
     noFill(); // don't fill
-    image(img,0,0);
-  } 
+    image(img, 0, 0);
+  }
 
   // MAIN ACTION
   push(); // start a transformation matrix
-  translate(width/2, height/2); // move to middle of screen
+  translate(width / 2, height / 2); // move to middle of screen
   var erad = 3;
-  
-    var pixelX = width/2;
-    var pixelY = height/2;
-  for (i = 0; i<sines.length; i++) // go through all the sines
+
+  var pixelX = width / 2;
+  var pixelY = height / 2;
+  for (i = 0; i < sines.length; i++) // go through all the sines
   {
     // setup for tracing
-    var radius = rad/(i+1); // radius for circle itself
+    var radius = rad / (i + 1); // radius for circle itself
     rotate(sines[i]); // rotate circle
-    if (!trace) ellipse(0, 0, radius*2, radius*2); // if we're simulating, draw the sine
+    if (!trace) ellipse(0, 0, radius * 2, radius * 2); // if we're simulating, draw the sine
     push(); // go up one level
     translate(0, radius); // move to sine edge
-    
-     pixelX += (radius * cos(sines[i] + PI/2));
-      pixelY += (radius * sin(sines[i] + PI/2 ));
+    if (i == 0) {
+      pixelX += (radius * cos(sines[i] + HALF_PI));
+      pixelY += (radius * sin(sines[i] + HALF_PI));
+    } 
+    else {
+      pixelX += (radius * cos(sines[i] - (PI / (ratio * (i+1))))) ;
+      pixelY += (radius * sin(sines[i] - (PI / (ratio * (i+1))))) ;
+    }
     var pixelColor = imageHolder.get(Math.round(pixelX), Math.round(pixelY));
     if(pixelColor[0] == 0 && pixelColor[1] == 0 && pixelColor[2] == 0){
       pixelColor.pop();
-      pixelColor.push(0);
+      pixelColor.push(30);
     }
     if (trace) {
       noStroke();
       fill(pixelColor); // also, um, blue
-     
-      erad = 10.0*(1.0-float(i)/sines.length); // pen width will be related to which sine
+
+      erad = 10.0 * (1.0 - float(i) / sines.length); // pen width will be related to which sine
     }
     if (!trace) ellipse(0, 0, pointRad, pointRad); // draw a little circle
     if (trace) ellipse(0, 0, pointRad, pointRad); // draw with erad if tracing
-    
+
     pop(); // go down one level
     translate(0, radius); // move into position for next sine
-    sines[i] = (sines[i]+(fund+(fund*i*ratio)))%TWO_PI; // update angle based on fundamental
-    
+    sines[i] = (sines[i] + (fund + (fund * i * ratio))) % TWO_PI; // update angle based on fundamental
+
   }
-  
+
   pop(); // pop down final transformation
 }
 
-function keyReleased()
-{
-  if (key==' ') {
-    trace = !trace; 
+function keyReleased() {
+  if (key == ' ') {
+    trace = !trace;
     background(255);
   }
 }
-function go(){
+
+function go() {
   trace = !trace;
   background(255);
 }
