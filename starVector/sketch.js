@@ -122,7 +122,7 @@ function draw(){
     }
   }
   if(frameCount % 30 === 0){
-    if(shootingStars.length >= 25){
+    if(shootingStars.length >= 5){
       shootingStars.shift();
     }
     else{shootingStars.push(new shootingStar(Math.floor(random(0,width/2)), Math.floor(random(0, height/2))));
@@ -137,11 +137,8 @@ function draw(){
     if(shootingStars[i].x >= width || shootingStars[i].y >= height || shootingStars[i].x <=0 || shootingStars[i].y <=0){
       shootingStars.splice(i,1);
     }
-    shootingStars[i].mouseDisplace = [mouseX - shootingStars[i].x, mouseY - shootingStars[i].y];
-    shootingStars[i].movementVector.x += 0.00005 * shootingStars[i].mouseDisplace[0];
-    shootingStars[i].movementVector.y += 0.00005 * shootingStars[i].mouseDisplace[1];
-    shootingStars[i].x += shootingStars[i].movementVector.x;
-    shootingStars[i].y += shootingStars[i].movementVector.y;
+    shootingStars[i].x += shootingStars[i].speed;
+    shootingStars[i].y += shootingStars[i].speed;
     shootingStars[i].opacity +=0.5;
     shootingStars[i].deg += Math.floor(random(4,20));
     shootingStars[i].draw();
@@ -153,7 +150,7 @@ function draw(){
       particles[i].draw();
       particles[i].x += particles[i].vector.x;
       particles[i].y += particles[i].vector.y;
-      if(particles[i].cycles >= 30 * exploding){
+      if(particles[i].cycles >= 15 * exploding){
         exploding  = 0;
         particles = [];
         break;
