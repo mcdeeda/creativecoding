@@ -1,0 +1,56 @@
+html{
+    overflow:hidden;
+    font-family: "niveau-grotesk";
+}
+body{
+    margin: 0;
+}
+#defaultCanvas0{
+    left: 50%;
+    position: absolute;
+    top: 60%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    max-width: 850px;
+    max-height: 850px;
+}
+h1, h2{
+    position: fixed;
+    left: 50%;
+    transform:translateX(-50%);
+    -webkit-transform:translateX(-50%);
+}
+h1{
+    top: 0px;
+    text-align: center;
+    width:100%;
+    font-size: calc(16px + 1vw)
+    font-family: "niveau-grotesk";
+}
+h2{
+    top: 5vh;
+    font-size: calc(10px + 1vw);
+}
+input{
+    position: fixed;
+    top: 110px;
+    left: 50%;
+    transform:translateX(-50%);
+    -webkit-transform:translateX(-50%);
+    
+}
+#accuracy{
+    top: 15vh;
+}
+#scroll-logo{
+    height: 15vw;
+    width: 15vw;
+    max-width: 130px;
+    max-height: 130px;
+    z-index: 1000;
+    position:absolute;
+    top: 60%;
+    left: 50%;
+    transform:translate(-50%,-50%) rotate(0deg);
+    -webkit-transform:translate(-50%,-50%) rotate(0deg);
+}
